@@ -50,12 +50,21 @@ func newDomainRecordResource(d *schema.ResourceData) (domainRecordResource, erro
 
 		for i, rec := range records {
 			data := rec.(map[string]interface{})
-			r.Records[i], err = NewDomainRecord(
-				data["name"].(string),
-				data["type"].(string),
-				data["data"].(string),
-				data["ttl"].(int),
-				data["priority"].(int))
+			
+			if data["type"].(string) == "MX" {
+				r.Records[i], err = NewDomainRecord(
+					data["name"].(string),
+					data["type"].(string),
+					data["data"].(string),
+					data["ttl"].(int),
+					data["priority"].(int))
+			} else {
+				r.Records[i], err = NewDomainRecord(
+					data["name"].(string),
+					data["type"].(string),
+					data["data"].(string),
+					data["ttl"].(int))
+			}
 
 			if err != nil {
 				return r, err
