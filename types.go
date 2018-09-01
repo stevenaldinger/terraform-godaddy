@@ -81,18 +81,30 @@ func NewDomainRecord(name, t, data string, ttl int, priority int) (*DomainRecord
 	if ttl < 0 {
 		return nil, fmt.Errorf("ttl must be a positive value")
 	}
-	if err := ValidatePriority(priority); err != nil {
-		return nil, err
+	if t == "MX" {
+		if err := ValidatePriority(priority); err != nil {
+			return nil, err
+		}
 	}
 	if !isSupportedType(t) {
 		return nil, fmt.Errorf("type must be one of: %s", supportedTypes)
 	}
+
+	if t == "MX" {
+		return &DomainRecord{
+			Name: name,
+			Type: t,
+			Data: data,
+			TTL:  ttl,
+			Priority: priority,
+		}, nil
+	}
+
 	return &DomainRecord{
 		Name: name,
 		Type: t,
 		Data: data,
 		TTL:  ttl,
-		Priority: priority,
 	}, nil
 }
 

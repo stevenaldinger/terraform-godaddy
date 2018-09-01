@@ -156,7 +156,6 @@ func resourceDomainRecord() *schema.Resource {
 						"priority": &schema.Schema{
 							Type:     schema.TypeInt,
 							Optional: true,
-							Default:  DefaultPriority,
 						},
 					},
 				},
@@ -255,14 +254,26 @@ func populateResourceDataFromResponse(r []*DomainRecord, d *schema.ResourceData)
 func flattenRecords(list []*DomainRecord) []map[string]interface{} {
 	result := make([]map[string]interface{}, 0, len(list))
 	for _, r := range list {
-		l := map[string]interface{}{
-			"name": r.Name,
-			"type": r.Type,
-			"data": r.Data,
-			"ttl":  r.TTL,
-			"priority": r.Priority,
+		if r.Type == "MX" {
+			l := map[string]interface{}{
+				"name": r.Name,
+				"type": r.Type,
+				"data": r.Data,
+				"ttl":  r.TTL,
+				"priority": r.Priority,
+			}
+
+			result = append(result, l)
+		} else {
+			l := map[string]interface{}{
+				"name": r.Name,
+				"type": r.Type,
+				"data": r.Data,
+				"ttl":  r.TTL,
+			}
+
+			result = append(result, l)
 		}
-		result = append(result, l)
 	}
 	return result
 }

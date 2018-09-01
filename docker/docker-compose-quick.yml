@@ -1,0 +1,16 @@
+version: '3'
+services:
+  builder:
+    container_name: godaddy-provider-builder
+    hostname: godaddy-provider-builder
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command:
+    - "go"
+    - "build"
+    - "-v"
+    - "."
+    restart: "no"
+    volumes:
+    - ..:/go/src/github.com/n3integration/terraform-godaddy

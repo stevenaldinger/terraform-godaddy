@@ -9,5 +9,8 @@ UNAME_S := $(shell uname -s)
 export
 # ===================== [END] Global Variable Declaration ==================== #
 
-build:
+build_with_deps:
 	@docker-compose -f "${BASE_DIR}/docker/docker-compose.yml" run builder
+
+build:
+	@docker-compose -f "${BASE_DIR}/docker/docker-compose-quick.yml" run builder
